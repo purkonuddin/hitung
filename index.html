@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#000000" />
+        <meta
+        name="description"
+        content="Web site created using create-react-app"
+        />
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <title>React App</title>
+        <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        
+    </head>
+    <body>
+        <div class="App">
+            <h1>Calculator</h1>
+            <div class="calc-wrapper">
+                <div class="input" >  
+                    <input type="text" 
+                        class="form-control input-lg" 
+                        id="expression" 
+                        value="0" 
+                        disabled/> 
+                </div>
+                <div class="input" >  
+                    <input type="text" id="result" /> 
+                </div>
+              <div class="row">
+                <div class="button-wrapper button"><a class="num-button seven" href="#">7</a></div>
+                <div class="button-wrapper button"><a class="num-button eight" href="#">8</a></div>
+                <div class="button-wrapper button"><a class="num-button nine" href="#">9</a> </div>
+                <div class="button-wrapper button operator"><a class="function-button divide" href="#">/</a> </div>
+              </div>
+              <div class="row">
+                <div class="button-wrapper button"><a class="num-button four" href="#">4</a> </div>
+                <div class="button-wrapper button"><a class="num-button five" href="#">5</a> </div>
+                <div class="button-wrapper button"><a class="num-button six" href="#">6</a> </div>
+                <div class="button-wrapper button operator"><a class="function-button multiply" href="#">*</a> </div>
+              </div>
+              <div class="row">
+                <div class="button-wrapper button"><a class="num-button one" href="#">1</a> </div>
+                <div class="button-wrapper button"><a class="num-button two" href="#">2</a></div>
+                <div class="button-wrapper button"><a class="num-button three" href="#">3</a></div>
+                <div class="button-wrapper button operator"><a class="function-button add" href="#">+</a> </div>
+              </div>
+              <div class="row">
+                <div class="button-wrapper button" ><a class="num-button dot" href="#">.</a> </div>
+                <div class="button-wrapper button"><a class="num-button zero" href="#">0</a> </div>
+                <div class="button-wrapper button"><a class="clear-button clear" href="#">C</a></div>
+                <div class="button-wrapper button operator"><a class="function-button subtract" href="#">-</a> </div>
+              </div>
+              <div class="row">
+                <div class="button-wrapper button equal-btn" ><a class="equals-button" href="#">=</a> </div>
+              </div>
+            </div>
+        </div>
+ 
+                    
+          </div>
+            <script> 
+                $(document).ready(function(){
+                    //Adding to the expression
+                    $(".num-button").click(function() {
+                        if ($("#expression").val() == 0)
+                            $("#expression").val($(this).text());
+                        else
+                            $("#expression").val($("#expression").val() + $(this).text());
+                        $("#expression").data("isPendingFunction", false); 
+
+                    }); 
+                        
+                    $(".clear-button").click(function(){ 
+                        // resetCalculator("0"); 
+                        $("#expression").val("0");
+                        $("#result").val("0");
+                    });
+                        
+                    $(".function-button").click(function(){ 
+                        var isPendingFunction = $("#expression").data("isPendingFunction");
+                        var currFunction = $(this).text(); 
+                        var value = $("#expression").val();
+                        if($("#expression").data("isPendingFunction") == true){
+                            $("#expression").val(value.slice(0, value.length - 1));
+                            $("#expression").val($("#expression").val() + $(this).text())
+                            // console.log(aaa, $("#expression").val());
+                        }else{
+                            $("#expression").val(value + currFunction);
+                            // console.log($("#expression").val());
+                        }
+                        $("#expression").data("isPendingFunction", true); 
+                    }); 
+                        
+                    $(".equals-button").click(function(){ 
+                        var result;
+                        //Check for syntax error
+                        try {
+                            result = (eval(($("#expression").val())));
+                        } catch (e) {
+                            if (e instanceof SyntaxError) {
+                                alert("Error! Resetting values.");
+                                $("#expression").val("0");
+                                $("#result").val("0");
+                            }
+                            if (e instanceof TypeError) {
+                                alert("Error! Resetting values.");
+                                $("#expression").val("0");
+                                $("#result").val("0");
+                            }
+                        }
+                        $("#result").val(result);
+                        $("#expression").val("0");
+                        $("#expression").data("isPendingFunction", false); 
+                    });  
+                });
+            </script>
+    </body>
+</html>
